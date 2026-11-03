@@ -4,7 +4,7 @@
 
 <p align="center">
 <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-111827?style=flat-square">
-<img alt="23 MCP tools" src="https://img.shields.io/badge/MCP-23_tools-7c3aed?style=flat-square">
+<img alt="26 MCP tools" src="https://img.shields.io/badge/MCP-26_tools-7c3aed?style=flat-square">
 <img alt="Works with Claude, ChatGPT, Codex" src="https://img.shields.io/badge/agents-Claude_·_ChatGPT_·_Codex-1f6feb?style=flat-square">
 <img alt="In daily use" src="https://img.shields.io/badge/status-in_daily_use-238636?style=flat-square">
 </p>
