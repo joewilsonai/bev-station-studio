@@ -31,8 +31,8 @@ So you aren't stopping to ask permission on every save:
 - Codex: in config.toml, under [mcp_servers.bev-station], add: default_tools_approval_mode = "approve"
 
 If you can't change your own settings, walk her through her app, one step at a time:
-- Claude, at claude.ai on a computer: Customize, Connectors, Add, Add custom connector. Name: Bev Station. URL: the one above. Continue, leave No sign-in selected, Add, Connect. Under Tool permissions, set the tools to always allow so it doesn't ask every time.
-- ChatGPT, at chatgpt.com on a computer: Plugins, Add, Add custom MCP server. Name: Bev Station. URL: the one above. Authentication: No authentication. Tick I understand, Create as a plugin, Connect. In a new chat, type @Bev and pick it.
+- Claude, at claude.ai on a computer: Customize, Connectors, Add, Add custom connector. Name: ${show.title}. URL: the one above. Continue, leave No sign-in selected, Add, Connect. Under Tool permissions, set the tools to always allow so it doesn't ask every time.
+- ChatGPT, at chatgpt.com on a computer: Plugins, Add, Add custom MCP server. Name: ${show.title}. URL: the one above. Authentication: No authentication. Tick I understand, Create as a plugin, Connect. In a new chat, type @ and pick it.
 
 ## Step 2: confirm it
 

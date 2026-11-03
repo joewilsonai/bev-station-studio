@@ -21,7 +21,7 @@ export default async function Bible() {
         <section><img src={cur("cherry-jane")?.src ?? "/canon/cherry-jane-reference-LOCKED.jpg"} alt="Cherry Jane" />{cur("cherry-jane") && <p><b>Kim changed her look:</b> {cur("cherry-jane")!.description}</p>}<pre>{cj}</pre></section>
       </div>
       <h2>The floor</h2>
-      <img className="plan" src="/canon/floor-plan.png" alt="Bev Station floor plan" />
+      <img className="plan" src="/canon/floor-plan.png" alt="Floor plan" />
       <h2>The setting</h2>
       <pre>{setting}</pre>
     </main>

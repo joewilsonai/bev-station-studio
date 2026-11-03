@@ -1,1 +1,169 @@
-[]
+[
+ {
+  "id": "demo1",
+  "panel": "Cold open",
+  "desc": "Close on Rio's face looking down at the counter, one eyebrow slowly rising.",
+  "camera": "Close, a new angle",
+  "place": "floor",
+  "cast": [],
+  "lines": [
+   {
+    "who": "other",
+    "name": "Rio",
+    "kind": "aloud",
+    "text": "Coffee's extra."
+   }
+  ],
+  "seconds": 2.5,
+  "status": "yes",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s6.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "demo2",
+  "panel": "Scene 1",
+  "desc": "The empty diner at night. Rio wipes down the long counter alone.",
+  "camera": "Wide from the door",
+  "place": "floor",
+  "cast": [],
+  "lines": [
+   {
+    "who": "other",
+    "name": "Rio",
+    "kind": "aloud",
+    "text": "We close in ten minutes."
+   }
+  ],
+  "seconds": 4,
+  "status": "yes",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s1.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "demo3",
+  "panel": "Scene 1",
+  "desc": "Rio glances up at the clock, unimpressed.",
+  "camera": "Medium on Rio",
+  "place": "floor",
+  "cast": [],
+  "lines": [],
+  "seconds": 2,
+  "status": "drawn",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s2.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "demo4",
+  "panel": "Scene 1",
+  "desc": "The door opens. Sam steps in, shaking off the rain.",
+  "camera": "Medium, from behind the counter",
+  "place": "floor",
+  "cast": [],
+  "lines": [
+   {
+    "who": "other",
+    "name": "Sam",
+    "kind": "aloud",
+    "text": "Then I'll be quick."
+   }
+  ],
+  "seconds": 3,
+  "status": "drawn",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s3.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "demo5",
+  "panel": "Scene 1",
+  "desc": "Sam sits. She doesn't stop wiping.",
+  "camera": "Two-shot across the counter",
+  "place": "floor",
+  "cast": [],
+  "lines": [
+   {
+    "who": "other",
+    "name": "Sam",
+    "kind": "aloud",
+    "text": "You left this at my house. In 1994."
+   },
+   {
+    "who": "other",
+    "name": "Sam",
+    "kind": "aloud",
+    "text": "I came all this way, you know.",
+    "proposed": true
+   }
+  ],
+  "seconds": 6,
+  "status": "drawn",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s4.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "demo6",
+  "panel": "Scene 1",
+  "desc": "He sets an envelope on the counter. Her rag stops.",
+  "camera": "Insert on his hands",
+  "place": "floor",
+  "cast": [],
+  "lines": [],
+  "seconds": 2.5,
+  "status": "drawn",
+  "takes": [
+   {
+    "id": "a",
+    "src": "/sample/s5.jpg",
+    "by": "Sample",
+    "at": "2026-11-02T12:00:00Z"
+   }
+  ],
+  "pick": "a",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ }
+]

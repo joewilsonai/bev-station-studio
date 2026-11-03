@@ -92,7 +92,7 @@ async function handle(req: Request, ctx: { params: Promise<{ token: string }> })
   const who = t && t === process.env.KIM_TOKEN ? "Kim" : t && t === process.env.JOE_TOKEN ? "Joe" : null;
   if (!who) return new Response("Not found", { status: 404 });
   if (req.method === "GET" && !(req.headers.get("accept") ?? "").includes("text/event-stream"))
-    return new Response(`This is the Bev Station connector link. It's working.\n\nIt goes in Claude or ChatGPT, not a browser tab. The steps are at ${SITE}/connect\n`, { headers: { "content-type": "text/plain; charset=utf-8" } });
+    return new Response(`This is the studio connector link. It's working.\n\nIt goes in Claude or ChatGPT, not a browser tab. The steps are at ${SITE}/connect\n`, { headers: { "content-type": "text/plain; charset=utf-8" } });
   return handlerFor(who)(req);
 }
 export { handle as GET, handle as POST, handle as DELETE };

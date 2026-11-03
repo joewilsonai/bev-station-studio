@@ -1,1 +1,19 @@
-[]
+[
+ {
+  "id": "n1",
+  "kind": "note",
+  "title": "A note from the writer",
+  "text": "Sam should look like he drove all night. Rio never stops moving her hands.",
+  "ep": 1,
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ },
+ {
+  "id": "i1",
+  "kind": "image",
+  "title": "The diner, wide",
+  "src": "/sample/s1.jpg",
+  "by": "Sample",
+  "at": "2026-11-02T12:00:00Z"
+ }
+]

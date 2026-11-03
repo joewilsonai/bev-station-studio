@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Board, ChatMsg, Line, Shot, Who } from "@/lib/types";
 import type { BankItem } from "@/lib/bank";
 import type { Looks } from "@/lib/looks";
+import show from "@/data/show.json";
 import { NAMES, PLACES } from "@/lib/types";
 
 type Props = { ep: number; title: string; script: string; who: string; initial: Board; all: { n: number; title: string }[] };
@@ -54,7 +55,7 @@ export default function Studio({ ep, title, script, who, initial, all }: Props) 
   return (
     <div className="studio" data-tab={tab}>
       <header className="top">
-        <Link className="logo-sm" href="/">Bev Station</Link>
+        <Link className="logo-sm" href="/">{show.title}</Link>
         <select aria-label="Episode" value={ep} onChange={e => router.push(`/e/${e.target.value}`)}>
           {all.map(x => <option key={x.n} value={x.n}>{x.n}. {x.title}</option>)}
         </select>
