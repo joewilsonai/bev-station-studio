@@ -1,4 +1,5 @@
 import { mutateJSON, readJSON } from "./store";
+import { logBoard } from "./history";
 import { episode } from "./episodes";
 import { inScript } from "./canon";
 import type { Board, Line, Shot, Who } from "./types";
@@ -22,8 +23,11 @@ export function makeShot(ep: number, s: ShotInput, by: string): Shot {
   return { id: newId(), panel: s.panel, desc: s.desc ?? "", camera: s.camera, place: s.place, cast: s.cast ?? [],
     lines: stampLines(ep, s.lines), seconds: s.seconds ?? 5, note: s.note, refs: s.refs, sounds: s.sounds, status: "idea", takes: [], by, at: new Date().toISOString() };
 }
-export async function changeBoard(ep: number, fn: (b: Board) => void): Promise<Board> {
-  return mutateJSON<Board>(pathFor(ep), () => seed(ep), b => { fn(b); b.updatedAt = new Date().toISOString(); return b; });
+export async function changeBoard(ep: number, fn: (b: Board) => void, undoOf?: string): Promise<Board> {
+  let before: Board | null = null;
+  const after = await mutateJSON<Board>(pathFor(ep), () => seed(ep), b => { before = JSON.parse(JSON.stringify(b)); fn(b); b.updatedAt = new Date().toISOString(); return b; });
+  if (before) await logBoard(ep, before, after, undoOf);
+  return after;
 }
 export function findShot(b: Board, id: string): Shot {
   const s = b.shots.find(x => x.id === id);

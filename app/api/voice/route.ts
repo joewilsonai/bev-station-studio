@@ -8,12 +8,12 @@ import show from "@/data/show.json";
 export const dynamic = "force-dynamic"; export const maxDuration = 120;
 const VOICES: Record<string, string> = show.voices;
 export async function POST(req: NextRequest) {
-  const by = await currentUser(); const { who, text } = await req.json();
+  const by = await currentUser(); const { who, text, kind } = await req.json();
   let cost = 0;
   try {
-    const voice = VOICES[who]; if (!voice) throw new Error("There is no voice for that character yet.");
+    const voice = (kind === "thought" && VOICES[`${who}-thought`]) || VOICES[who]; if (!voice) throw new Error("There is no voice for that character yet.");
     const clean = String(text).replace(/[*_]/g, "").trim().slice(0, 900); if (!clean) throw new Error("This line is empty.");
-    const file = `voice/${who}-${createHash("sha1").update(clean).digest("hex").slice(0, 16)}.mp3`;
+    const file = `voice/${who}-${createHash("sha1").update(`${voice}:${clean}`).digest("hex").slice(0, 16)}.mp3`;
     if (await readBytes(file)) return NextResponse.json({ src: `/api/file/${file}` });
     const c = (clean.length / 1000) * 0.12; await reserve(`voice ${who}`, c, by); cost = c;
     const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice}?output_format=mp3_44100_128`, { method: "POST",

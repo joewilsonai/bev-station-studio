@@ -10,6 +10,10 @@ import { guide, SITE } from "@/lib/install";
 import { isServiceFailure, logProblem, logQuietly } from "@/lib/problems";
 import { readBytes } from "@/lib/store";
 import { fetchPublic } from "@/lib/fetch-public";
+import { setActor } from "@/lib/actor";
+import { recentChanges } from "@/lib/history";
+import { undoChange } from "@/lib/undo";
+import { fieldLabel, showValue } from "@/lib/diff";
 export const maxDuration = 300;
 const text = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
 const READ = { readOnlyHint: true } as const;
@@ -24,6 +28,7 @@ function handlerFor(who: string) {
   const name = (s?: string) => (s?.trim() ? `${s.trim().slice(0, 40)}, for ${who}` : `${who}, by connector`);
   // Every tool answers in words a person can act on, and real failures reach Luna by themselves.
   const guard = async <T,>(fn: () => Promise<T | string>) => {
+    setActor(`${who}, by connector`);
     try { const r = await fn(); return (typeof r === "string" ? text(r) : r) as ReturnType<typeof text>; }
     catch (e) { const m = (e as Error).message; if (isServiceFailure(m)) await logQuietly(m, "connector", who); return { ...text(m), isError: true }; }
   };
@@ -84,6 +89,10 @@ function handlerFor(who: string) {
         return { content: [...ok.flatMap(o => [{ type: "text" as const, text: `Look ${o.look.id}` }, pic(o.bytes)]), { type: "text" as const, text: `Nothing changed yet. When Kim chooses one, call set_look. See them at ${SITE}/bank.` }] }; }));
     server.registerTool("set_look", { title: "Make it her look", description: "Make a drawn option a character's current look, or pass look_id \"locked\" to go back to the Oct 26 look. Every new drawing uses it from then on. Only when Kim chose it in this conversation. Reports which existing shots show the old look.", inputSchema: z.object({ who: z.enum(["pen", "maneater", "cherry-jane"]), look_id: z.string(), kim_said: z.string().describe("Kim's words, quoted") }) },
       ({ who: w, look_id, kim_said }) => guard(async () => { if (who !== "Kim") throw new Error("Only Kim's own connection can change a look."); const l = await setLook(w, look_id === "locked" ? null : look_id, name(), kim_said); const redo = (await Promise.all(episodes.map(async e => ({ n: e.n, c: shotsToRedo(l, w, await getBoard(e.n)).length })))).filter(x => x.c); return `Done. New drawings use this look.${redo.length ? ` Shots still showing the old look: ${redo.map(x => `Episode ${x.n}: ${x.c}`).join(", ")}. Redraw them; filmed clips get reshot on Joe's side.` : ""}`; }));
+    server.registerTool("list_changes", { title: "What changed", description: "Recent changes in the studio: who, when and what, with before and after. Use the id with undo_change.", inputSchema: z.object({ limit: z.number().int().min(1).max(100).optional() }), annotations: READ },
+      ({ limit }) => guard(async () => (await recentChanges(limit ?? 25)).map(c => `${c.id} | ${c.at.slice(0, 16)}Z | ${c.by} | ${c.ep ? `Episode ${c.ep} | ` : ""}${c.title}${c.changes.map(f => `\n   ${fieldLabel(f.field)}: ${showValue(f.field, f.before).slice(0, 160)} -> ${showValue(f.field, f.after).slice(0, 160)}`).join("")}`).join("\n") || "Nothing has changed yet."));
+    server.registerTool("undo_change", { title: "Undo a change", description: "Put back what one logged change altered. Later edits to other fields stay, and drawn takes are never removed. Only when Kim asked for it.", inputSchema: z.object({ id: z.string() }) }, ({ id }) => guard(async () => undoChange(id)));
+    server.registerTool("request_feature", { title: "Ask for a feature", description: "Kim needs the studio to do something it can't. Say what she was trying to do, in her words. Luna builds it. Use this instead of sending her to Joe.", inputSchema: z.object({ what: z.string() }) }, ({ what }) => guard(async () => { await logProblem(`FEATURE REQUEST: ${what}`, "connector", who); return "Asked. Luna has it and builds from there. Tell Kim it's in, and don't promise when."; }));
     server.registerTool("report_problem", { title: "Report a problem", description: "Tell Luna something isn't working. Use this instead of sending Kim to Joe.", inputSchema: z.object({ what: z.string().describe("What was tried and the exact error") }) }, ({ what }) => guard(async () => { await logProblem(what, "connector", who); return "Reported. Luna has it."; }));
   }, { serverInfo: { name: "bev-station-studio", version: "2.0.0" }, instructions: `Call start_here first: it holds the rules of this show and how to work. The writer's words are canon, so copy lines exactly. Only she gives a shot her yes.` });
 }

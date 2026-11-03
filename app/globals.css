@@ -231,3 +231,10 @@ button{cursor:pointer}
 .item.lookon{outline:3px solid var(--cheaters)}
 .tag-redo{background:var(--gold);color:#2b1d00;border-radius:4px;padding:.45em .7em;font-size:15px}
 .meta .btn.yes{white-space:normal;margin-top:3px}
+.changes{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-width:60em}
+.change{background:var(--kitchen-2);border-radius:6px;padding:10px 14px}
+.change-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 14px}.change-head b{font-weight:600}.change-head small{color:var(--chalk-dim)}
+.change-field{margin:6px 0 0;font-size:15px;overflow-wrap:anywhere}.change-field span{color:var(--chalk-dim);margin-right:4px}
+.change-field del{color:#e6a79f}.change-field ins{color:#a6dfb0;text-decoration:none;margin-left:6px}
+.change-do{margin:6px 0 0;font-size:14.5px}
+.whofilter{background:var(--kitchen-2);border:1px solid var(--kitchen-line);border-radius:6px;padding:.35em .5em;color:var(--chalk)}

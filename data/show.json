@@ -10,7 +10,8 @@
  "voices": {
   "pen": "ELEVENLABS_VOICE_ID",
   "maneater": "ELEVENLABS_VOICE_ID",
-  "cherry-jane": "ELEVENLABS_VOICE_ID"
+  "cherry-jane": "ELEVENLABS_VOICE_ID",
+  "pen-thought": "ELEVENLABS_VOICE_ID"
  },
  "cast": []
 }

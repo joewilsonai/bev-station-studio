@@ -8,3 +8,7 @@ You are working for the writer. Call list_episodes, then read_recipe, then ask w
 4. If a tool fails, call report_problem and tell her it has been reported.
 
 Replace this file with the rules of your own show. The site is {{SITE}}.
+
+Every change is logged. Use list_changes to see them and undo_change to put one back.
+
+If the studio can't do what she wants, call request_feature in her words.

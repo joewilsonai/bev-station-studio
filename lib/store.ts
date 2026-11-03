@@ -1,4 +1,4 @@
-import { get, put, BlobPreconditionFailedError } from "@vercel/blob";
+import { get, list, put, BlobPreconditionFailedError } from "@vercel/blob";
 import { promises as fs } from "fs";
 import path from "path";
 const LOCAL = !process.env.BLOB_READ_WRITE_TOKEN; // tests and first boot without a store
@@ -35,4 +35,10 @@ export async function mutateJSON<T>(p: string, seed: () => T, fn: (v: T) => T | 
     catch (e) { if (!isConflict(e)) throw e; await new Promise(r => setTimeout(r, 120 * (i + 1) + Math.random() * 250)); }
   }
   throw new Error("Someone else kept saving at the same moment. Try again.");
+}
+export async function listPaths(prefix: string): Promise<string[]> {
+  if (LOCAL) { const walk = async (d: string): Promise<string[]> => { const es = await fs.readdir(d, { withFileTypes: true }).catch(() => []); return (await Promise.all(es.map(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]))).flat(); }; const root = path.join(process.cwd(), ".localstore"); return (await walk(path.join(root, prefix))).map(p => path.relative(root, p)); }
+  const out: string[] = []; let cursor: string | undefined;
+  do { const r = await list({ prefix, cursor, limit: 1000 }); out.push(...r.blobs.map(b => b.pathname)); cursor = r.hasMore ? r.cursor : undefined; } while (cursor);
+  return out;
 }

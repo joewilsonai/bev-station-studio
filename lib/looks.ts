@@ -1,6 +1,7 @@
 import { mutateJSON, readBytes, readJSON } from "./store";
 import { storeFile } from "./bank";
 import type { Board, Who } from "./types";
+import { logChange } from "./history";
 export type Look = { id: string; who: string; src: string; description: string; by: string; at: string };
 export type Looks = { looks: Look[]; current: Record<string, { id: string; setAt: string; by: string; said?: string } | undefined> };
 const FILE = "looks.json";
@@ -18,15 +19,19 @@ export async function addLook(who: string, bytes: Buffer, description: string, b
   return look;
 }
 // lookId null means back to the look locked Oct 26.
-export async function setLook(who: string, lookId: string | null, by: string, said?: string) {
-  return mutateJSON<Looks>(FILE, empty, l => {
+export async function setLook(who: string, lookId: string | null, by: string, said?: string, undoOf?: string) {
+  let was: string | null = null;
+  const out = await mutateJSON<Looks>(FILE, empty, l => {
+    was = l.current[who]?.id ?? null;
     if (lookId === null) { l.current[who] = { id: "locked", setAt: new Date().toISOString(), by, said }; return; }
     if (!l.looks.some(x => x.id === lookId && x.who === who)) throw new Error("That look isn't one of hers.");
     l.current[who] = { id: lookId, setAt: new Date().toISOString(), by, said };
   });
+  await logChange({ kind: "look", target: who, title: `${who}'s look`, changes: [{ field: "look", before: was, after: lookId ?? "locked" }], by, undoOf });
+  return out;
 }
 // Shots still showing an earlier look, so she can see what needs redrawing or reshooting.
 export function shotsToRedo(l: Looks, who: string, b: Board) {
   const c = l.current[who]; if (!c) return [];
-  return b.shots.filter(s => !s.archived && s.cast.includes(who as Who) && s.takes.length > 0).filter(s => { const t = s.takes.find(x => x.id === s.pick) ?? s.takes[s.takes.length - 1]; return (s.status === "filmed" && c.id !== "locked") || (s.status !== "filmed" && (t.startedAt ?? t.at) < c.setAt); });
+  return b.shots.filter(s => !s.archived && s.cast.includes(who as Who) && s.takes.length > 0).filter(s => { const t = s.takes.find(x => x.id === s.pick) ?? s.takes[s.takes.length - 1]; return (t.startedAt ?? t.at) < c.setAt && (s.status !== "filmed" || c.id !== "locked"); });
 }

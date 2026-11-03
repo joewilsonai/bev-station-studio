@@ -4,7 +4,7 @@
 
 <p align="center">
 <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-111827?style=flat-square">
-<img alt="20 MCP tools" src="https://img.shields.io/badge/MCP-20_tools-7c3aed?style=flat-square">
+<img alt="23 MCP tools" src="https://img.shields.io/badge/MCP-23_tools-7c3aed?style=flat-square">
 <img alt="Works with Claude, ChatGPT, Codex" src="https://img.shields.io/badge/agents-Claude_·_ChatGPT_·_Codex-1f6feb?style=flat-square">
 <img alt="In daily use" src="https://img.shields.io/badge/status-in_daily_use-238636?style=flat-square">
 </p>
@@ -37,6 +37,8 @@ The sample show in these pictures comes with the repo, drawn with made-up people
 
 **The Recipe.** A fill-in-the-blank for a scene, so she can think in ingredients and nothing gets lost.
 
+**What changed.** Every edit is logged with who, when, and before and after. Undo puts back only what that change touched.
+
 </td>
 <td width="38%" align="center"><img src="docs/phone.png" alt="The studio on a phone" width="280"></td>
 </tr>
@@ -65,7 +67,7 @@ Tested with real Claude and ChatGPT chats, Claude Code and Codex.
 
 | Look | Board | Make | Keep |
 |---|---|---|---|
-| `start_here` `list_episodes` `read_episode` `read_bank` `read_recipe` `list_looks` `show_picture` | `add_shot` `update_shot` `move_shot` `remove_shot` `pick_take` `pin_to_shot` `give_yes` | `draw_shot` `draw_look` `make_face` `make_sound` | `add_note` `add_to_bank` `set_look` `set_recipe` `report_problem` |
+| `start_here` `list_episodes` `read_episode` `read_bank` `read_recipe` `list_looks` `show_picture` | `add_shot` `update_shot` `move_shot` `remove_shot` `pick_take` `pin_to_shot` `give_yes` | `draw_shot` `draw_look` `make_face` `make_sound` | `add_note` `add_to_bank` `set_look` `set_recipe` `list_changes` `undo_change` `request_feature` `report_problem` |
 
 ## What it won't let happen
 
@@ -78,6 +80,7 @@ These live in the server, so they hold no matter which agent is calling.
 | **No surprise bills** | Money is held before a paid call starts, so simultaneous requests can't pass the daily cap together. |
 | **Nobody overwrites anybody** | Boards use conditional writes, so two people or agents saving at once both survive. |
 | **Refused stays refused** | A refused picture is never retried on a less filtered model, and sexual requests are blocked outright. |
+| **Nothing gets lost** | Every change is logged in an append-only history, and takes and removed shots are kept. |
 | **Problems reach the operator** | Failures log themselves, and agents get `report_problem`, so the writer never has to chase anyone. |
 
 ## How it fits together

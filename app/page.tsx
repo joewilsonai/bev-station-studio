@@ -17,7 +17,7 @@ export default async function Door() {
         <h1 className="logo">{show.title}</h1>
         <div>
           <p>Hi {who}. Pick an episode. Your script is on the left, the shots hang on the rail, and I&apos;m on the right. Tell me what you see.</p>
-          <nav><Link href="/bank">The Bank</Link><Link href="/recipe">The Recipe</Link><Link href="/bible">The show bible</Link><Link href="/connect">Work from your Claude or ChatGPT</Link></nav>
+          <nav><Link href="/bank">The Bank</Link><Link href="/recipe">The Recipe</Link><Link href="/bible">The show bible</Link><Link href="/changes">What changed</Link><Link href="/connect">Work from your Claude or ChatGPT</Link></nav>
         </div>
       </header>
       <details className="howto">

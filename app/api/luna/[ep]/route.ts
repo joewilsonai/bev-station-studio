@@ -9,6 +9,7 @@ import { mutateJSON, readJSON } from "@/lib/store";
 import { addItem, getBank, getRecipe, setRecipe } from "@/lib/bank";
 import { makeSoundItem } from "@/lib/sound";
 import { logProblem, logQuietly } from "@/lib/problems";
+import { setActor } from "@/lib/actor";
 import { activeLook, getLooks } from "@/lib/looks";
 import type { ChatMsg } from "@/lib/types";
 export const dynamic = "force-dynamic"; export const maxDuration = 300;
@@ -20,6 +21,7 @@ export async function GET(_: NextRequest, { params }: Ctx) {
   return NextResponse.json((await readJSON<ChatMsg[]>(chatPath(Number((await params).ep))))?.value ?? []);
 }
 async function runTool(name: string, input: Record<string, any>, ep: number, by: string, emit: (o: object) => void): Promise<string> {
+  setActor(`Luna, for ${by}`);
   switch (name) {
     case "add_shots": { const fresh = input.shots.map((s: any) => makeShot(ep, s, "Luna")); const made: string[] = fresh.map((s: any) => s.id);
       const b = await changeBoard(ep, board => { const live = board.shots.filter(s => !s.archived); const at = input.at ? input.at - 1 : live.length;
@@ -37,6 +39,7 @@ async function runTool(name: string, input: Record<string, any>, ep: number, by:
     case "make_face": emit({ face: { who: input.who, expression: input.expression } }); return "Drawing started. It lands in the Bank under that character's range in a minute or two; its id is not known yet.";
     case "draw_look": emit({ look: { who: input.who, description: input.description, keepFace: !!input.keep_face } }); return "Drawing started. The option lands in the Bank under Faces in a minute or two. Kim makes it current herself.";
     case "set_recipe": await setRecipe(input.text, by); return "Recipe updated.";
+    case "request_feature": await logProblem(`FEATURE REQUEST: ${input.what}`, `sidebar e${ep}`, by); return "Asked. Tell her it's on its way, without promising when.";
     case "report_problem": await logProblem(input.what, `sidebar e${ep}`, by); return "Reported to my side.";
     case "remember": await mutateJSON<Note[]>("notes.json", () => [], n => { n.push({ note: input.note, by, at: new Date().toISOString() }); }); return "Kept.";
   }

@@ -60,7 +60,7 @@ export default function Studio({ ep, title, script, who, initial, all }: Props) 
           {all.map(x => <option key={x.n} value={x.n}>{x.n}. {x.title}</option>)}
         </select>
         <span className="grow" />
-        <Link href="/bank">Bank</Link><Link href="/recipe">Recipe</Link><Link href="/bible">Bible</Link>
+        <Link href="/bank">Bank</Link><Link href="/recipe">Recipe</Link><Link href="/bible">Bible</Link><Link href="/changes">What changed</Link>
       </header>
 
       <section className="pane-script" aria-label="Your script">
@@ -129,7 +129,7 @@ function ShotEditor({ shot, index, count, who, change, draw, drawing, bank, look
   const commit = (field: "desc" | "camera" | "note", value: string, was: string) => { dirty.current.delete(field); if (value !== was) patch({ [field]: value }); };
   const pic = picOf(shot);
   const shown = shot.takes.find(t => t.id === shot.pick) ?? shot.takes[shot.takes.length - 1];
-  const stale = shown ? shot.cast.filter(c => { const k = looks.current[c]; return k && (shot.status === "filmed" ? k.id !== "locked" : (shown.startedAt ?? shown.at) < k.setAt); }) : [];
+  const stale = shown ? shot.cast.filter(c => { const k = looks.current[c]; return k && (shown.startedAt ?? shown.at) < k.setAt && (shot.status !== "filmed" || k.id !== "locked"); }) : [];
   const toggleCast = (c: Who) => patch({ cast: shot.cast.includes(c) ? shot.cast.filter(x => x !== c) : [...shot.cast, c] });
   const saveLines = (l: Line[]) => { dirty.current.delete("lines"); setLines(l); patch({ lines: l }); };
   return (
@@ -197,10 +197,10 @@ function LineRow({ line, onChange, onSave, onRemove }: { line: Line; onChange: (
   const [busy, setBusy] = useState(false); const [msg, setMsg] = useState("");
   const hear = async () => {
     setBusy(true); setMsg("");
-    const r = await fetch("/api/voice", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ who: line.who, text: line.text }) });
+    const r = await fetch("/api/voice", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ who: line.who, kind: line.kind, text: line.text }) });
     const j = await r.json(); setBusy(false);
     if (!r.ok) { setMsg(j.error); return; }
-    const a = new Audio(j.src); a.playbackRate = line.who === "pen" ? 0.92 : 1; a.play();
+    const a = new Audio(j.src); a.play();
   };
   return (
     <div className="lineitem">
@@ -235,7 +235,7 @@ function Luna({ ep, title, who, empty, onBoard, onDraw, onBank }: { onBank: () =
       for (;;) { const { done, value } = await reader.read(); if (done) break; buf += dec.decode(value, { stream: true });
         let i; while ((i = buf.indexOf("\n")) >= 0) { const raw = buf.slice(0, i); buf = buf.slice(i + 1); if (!raw) continue; const e = JSON.parse(raw);
           if (e.text) { setTool(""); setMsgs(m => { const c = [...m]; c[c.length - 1] = { ...c[c.length - 1], text: c[c.length - 1].text + e.text }; return c; }); }
-          if (e.tool) setTool(({ add_shots: "Hanging shots on the rail", update_shot: "Changing a shot", move_shot: "Moving a shot", remove_shot: "Taking a shot down", draw_shots: "Sending shots to be drawn", read_episode: "Reading your script", remember: "Writing that down", pin_to_shot: "Pinning it to the shot", add_note: "Putting a note in the Bank", make_sound: "Making the sound", make_face: "Drawing that face", draw_look: "Drawing a new look", set_recipe: "Updating the Recipe" } as Record<string, string>)[e.tool] ?? "Working");
+          if (e.tool) setTool(({ add_shots: "Hanging shots on the rail", update_shot: "Changing a shot", move_shot: "Moving a shot", remove_shot: "Taking a shot down", draw_shots: "Sending shots to be drawn", read_episode: "Reading your script", remember: "Writing that down", pin_to_shot: "Pinning it to the shot", add_note: "Putting a note in the Bank", make_sound: "Making the sound", make_face: "Drawing that face", draw_look: "Drawing a new look", set_recipe: "Updating the Recipe", request_feature: "Asking for that" } as Record<string, string>)[e.tool] ?? "Working");
           if (e.board) onBoard(e.board);
           if (e.draw) onDraw(e.draw, e.direction);
           if (e.bank) onBank();
@@ -280,8 +280,8 @@ function Player({ bank, shots, startAt, close }: { bank: BankItem[]; shots: Shot
       for (const l of s.lines) { if (!alive()) return; setLine(l);
         let played = false;
         if (voice && l.who !== "other" && l.text.trim()) { try {
-          const r = await fetch("/api/voice", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ who: l.who, text: l.text }) });
-          if (r.ok && alive()) { const { src } = await r.json(); await new Promise<void>(res => { const a = new Audio(src); audio.current = a; a.playbackRate = l.who === "pen" ? 0.92 : 1; a.onended = () => res(); a.onerror = () => res(); a.play().then(() => { played = true; }).catch(() => res()); }); }
+          const r = await fetch("/api/voice", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ who: l.who, kind: l.kind, text: l.text }) });
+          if (r.ok && alive()) { const { src } = await r.json(); await new Promise<void>(res => { const a = new Audio(src); audio.current = a; a.onended = () => res(); a.onerror = () => res(); a.play().then(() => { played = true; }).catch(() => res()); }); }
         } catch { /* captions carry it */ } }
         if (!played && alive()) await new Promise(res => setTimeout(res, Math.max(1400, l.text.split(/\s+/).length * 400)));
       }
