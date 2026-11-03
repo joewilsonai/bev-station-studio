@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Shots hanging from a steel order rail">
+<defs><pattern id="p" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#5a1222"/><rect x="22" width="2" height="24" fill="#6b1a2c"/></pattern><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2e6e6"/><stop offset=".5" stop-color="#a9b0b2"/><stop offset="1" stop-color="#6c7477"/></linearGradient></defs>
+<rect width="1200" height="420" fill="url(#p)"/>
+<text x="70" y="118" font-family="Georgia,serif" font-style="italic" font-size="78" fill="#f6ecd6">Writers' Room Studio</text>
+<text x="74" y="162" font-family="Helvetica,Arial,sans-serif" font-size="25" fill="#f6ecd6">Script on one side. Shots on the rail. An agent that keeps your words.</text>
+<rect x="0" y="200" width="1200" height="15" fill="url(#s)"/>
+<g font-family="Courier New,monospace" font-size="17" fill="#22302a">
+<g transform="translate(78 208)"><rect width="152" height="190" fill="#e6efd8"/><path d="M0 40H152M0 70H152M0 100H152M0 130H152M0 160H152" stroke="#b9cda6"/><text x="12" y="30" fill="#b5282c" font-weight="700">No. 1</text><text x="12" y="62">Cold open</text><text x="12" y="92">2.5s</text></g>
+<g transform="translate(250 208)"><rect width="152" height="190" fill="#e6efd8"/><path d="M0 40H152M0 70H152M0 100H152M0 130H152M0 160H152" stroke="#b9cda6"/><text x="12" y="30" fill="#b5282c" font-weight="700">No. 2</text><text x="12" y="62">Two-shot</text><text x="12" y="92">4s</text></g>
+<g transform="translate(422 208)"><rect width="152" height="190" fill="#e6efd8"/><path d="M0 40H152M0 70H152M0 100H152M0 130H152M0 160H152" stroke="#b9cda6"/><text x="12" y="30" fill="#b5282c" font-weight="700">No. 3</text><text x="12" y="62">Reaction</text><text x="12" y="92">3s</text></g>
+<g transform="translate(594 208)"><rect width="152" height="190" fill="#e6efd8"/><path d="M0 40H152M0 70H152M0 100H152M0 130H152M0 160H152" stroke="#b9cda6"/><text x="12" y="30" fill="#b5282c" font-weight="700">No. 4</text><text x="12" y="62">Draw 3</text><text x="12" y="92">Pick one</text></g>
+<g transform="translate(766 208)"><rect width="152" height="190" fill="#e6efd8"/><path d="M0 40H152M0 70H152M0 100H152M0 130H152M0 160H152" stroke="#b9cda6"/><text x="12" y="30" fill="#b5282c" font-weight="700">No. 5</text><text x="12" y="62">Her yes</text><circle cx="130" cy="24" r="8" fill="#b5282c"/></g>
+<g transform="translate(938 208)"><rect width="152" height="190" fill="none" stroke="#f6ecd6" stroke-dasharray="6 5"/><text x="28" y="100" fill="#f6ecd6">Add a shot</text></g>
+</g></svg>

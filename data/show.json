@@ -1,0 +1,16 @@
+{
+ "title": "Your Show",
+ "author": "Your Name",
+ "site_style": "photoreal film still, natural light, vertical",
+ "look_notes": {
+  "pen": "describe her",
+  "maneater": "describe her",
+  "cherry-jane": "describe her"
+ },
+ "voices": {
+  "pen": "ELEVENLABS_VOICE_ID",
+  "maneater": "ELEVENLABS_VOICE_ID",
+  "cherry-jane": "ELEVENLABS_VOICE_ID"
+ },
+ "cast": []
+}

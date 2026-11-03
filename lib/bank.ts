@@ -1,0 +1,37 @@
+import { promises as fs } from "fs";
+import path from "path";
+import { mutateJSON, readBytes, readJSON, writeBytes } from "./store";
+import seed from "@/data/seed-bank.json";
+export type Kind = "image" | "sound" | "note" | "face";
+export type BankItem = { id: string; kind: Kind; title: string; text?: string; src?: string; who?: string; ep?: number; tags?: string[]; by: string; at: string; archived?: boolean };
+const FILE = "bank.json";
+export const getBank = async (): Promise<BankItem[]> => (await readJSON<BankItem[]>(FILE))?.value ?? (seed as BankItem[]);
+export async function changeBank(fn: (b: BankItem[]) => void): Promise<BankItem[]> {
+  return mutateJSON<BankItem[]>(FILE, () => [...(seed as BankItem[])], b => { fn(b); return b; });
+}
+export const bankId = () => Math.random().toString(36).slice(2, 10);
+export async function addItem(item: Omit<BankItem, "id" | "at">): Promise<BankItem> {
+  const full: BankItem = { ...item, id: bankId(), at: new Date().toISOString() };
+  await changeBank(b => { b.push(full); });
+  return full;
+}
+export async function storeFile(name: string, data: Buffer, type: string) {
+  const p = `bank/${bankId()}-${name.replace(/[^a-z0-9.]+/gi, "-").toLowerCase().slice(-48)}`;
+  await writeBytes(p, data, type);
+  return `/api/file/${p}`;
+}
+// The bytes of a bank picture, whether it was uploaded or came with the studio.
+export async function itemBytes(item: BankItem): Promise<Buffer | null> {
+  if (!item.src) return null;
+  if (item.src.startsWith("/api/file/")) return (await readBytes(item.src.slice("/api/file/".length)))?.bytes ?? null;
+  return fs.readFile(path.join(process.cwd(), "public", item.src)).catch(() => null);
+}
+export async function getRecipe(): Promise<string> {
+  return (await readJSON<{ text: string }>("recipe.json"))?.value.text ?? fs.readFile(path.join(process.cwd(), "data", "recipe-seed.md"), "utf8");
+}
+export async function setRecipe(text: string, by: string) {
+  await writeBytes("recipe.json", JSON.stringify({ text, by, at: new Date().toISOString() }), "application/json");
+}
+export function bankSummary(items: BankItem[]): string {
+  return items.filter(i => !i.archived).map(i => `${i.id} [${i.kind}${i.who ? ` ${i.who}` : ""}${i.ep ? ` ep${i.ep}` : ""}] ${i.title}${i.text ? `: ${i.text}` : ""}`).join("\n") || "(empty)";
+}
